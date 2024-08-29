@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addCompare } from '../store/CompareSlice';
 import { toast } from 'react-toastify';
 import { RootState, store } from '../store/store';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -45,16 +46,23 @@ const RenderCompareButton = (data: any) => {
   const list = useSelector((state: RootState) => state.compare.compareList);
   const isExist = list.find((item: any) => item.id === data.id) ? true : false;
   const dispatch = useDispatch();
+  const navigate =useNavigate();
 
   const handleAdd = () => {
-    const list: Product[] = store.getState().compare.compareList
     if (list?.length >= 4) {
-      toast.error('You can compare only 4 products');
+      toast.error('Maximum 4 products can be compared');
       return;
     }
 
     dispatch(addCompare(data));
     toast.success('Product added to comparison');
+  if(store.getState().compare.compareList.length == 2){
+    console.log("list length is 2")
+    console.log(window.location.pathname)
+    window.location.pathname == "/" ? navigate("/compare") : "";
+    
+    
+  }
 
   }
 
